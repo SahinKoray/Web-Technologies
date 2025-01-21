@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Librarie online</title>
+    <style>
+        /* Stiluri generale */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f7f7ff;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+    
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+    
+        h1 {
+            text-align: center;
+            font-size: 2.5rem;
+            color: #5a3cdb;
+            margin-bottom: 20px;
+        }
+    
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+    
+        .col {
+            flex: 1;
+            min-width: 300px;
+        }
+    
+        /* Stiluri formular */
+        form {
+            background-color: #f5f5fa;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+    
+        form label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+    
+        form input {
+             width: 100%;
+             padding: 10px;
+             margin-bottom: 15px; /* Spatiere intre inputuri */
+             border: 2px solid #e0e0f8;
+             border-radius: 5px;
+             font-size: 16px;
+             box-sizing: border-box; /* Asigura ca padding-ul este inclus in dimensiunea input-ului */
+             transition: all 0.3s ease;
+        }
+    
+        form input:focus {
+            border-color: #5a3cdb;
+            box-shadow: 0 0 8px rgba(90, 60, 219, 0.3);
+        }
+    
+        form button {
+            width: 100%;
+            padding: 12px;
+            background-color: #5a3cdb;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+    
+        form button:hover {
+            background-color: #4a32b3;
+        }
+    
+        /* Stiluri lista de carti */
+        #bookList {
+            max-height: 400px; /* Inaltime limitata pentru scroll */
+            overflow-y: auto; /* Scroll vertical */
+            padding-right: 10px;
+        }
+    
+        .book-card {
+            background: linear-gradient(135deg, #e0e0f8, #c7c4eb);
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px; /* Spatiere intre carduri */
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+    
+        .book-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+    
+        .book-card h5 {
+            margin: 0;
+            font-size: 18px;
+            color: #4a32b3;
+        }
+    
+        .book-card p {
+            margin: 5px 0;
+            color: #555;
+        }
+    
+        .book-card button {
+            padding: 8px 12px;
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+    
+        .book-card button:hover {
+            background-color: #c0392b;
+        }
+    
+        /* Stiluri responsive */
+        @media (max-width: 768px) {
+            .row {
+                flex-direction: column;
+            }
+        }
+    </style>
+
+
+
+</head>
+<body>
+    <div class="container">
+        <h1>Lista cartilor citite</h1>
+        <div class="row">
+            <!-- Formular pentru adaugarea unei carti -->
+            <div class="col">
+                <h3>Adauga o carte</h3>
+                <form id="addBookForm">
+                    <label for="title">Titlu</label>
+                    <input type="text" id="title" required>
+
+                    <label for="author">Autor</label>
+                    <input type="text" id="author" required>
+
+                    <label for="genre">Gen</label>
+                    <input type="text" id="genre" required>
+
+                    <label for="year">An</label>
+                    <input type="number" id="year" required>
+
+                    <button type="submit">Adauga carte</button>
+                </form>
+            </div>
+
+            <!-- Lista de carti -->
+            <div class="col">
+                <h3>Lista de carti</h3>
+                <div id="bookList">
+                    <!-- Cartile vor fi generate dinamic aici -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const apiUrl = '/books';
+
+        // Preia lista de carti din API
+        async function fetchBooks() {
+            const response = await fetch(apiUrl);
+            const books = await response.json();
+            displayBooks(books);
+        }
+
+        // Afiseaza lista de carti
+        function displayBooks(books) {
+            const bookList = document.getElementById('bookList');
+            bookList.innerHTML = ''; // Curata lista existenta
+            books.forEach(book => {
+                const card = document.createElement('div');
+                card.className = 'book-card';
+                card.innerHTML = `
+                    <h5>${book.title}</h5>
+                    <p><strong>Autor:</strong> ${book.author}</p>
+                    <p><strong>Gen:</strong> ${book.genre}</p>
+                    <p><strong>An:</strong> ${book.year}</p>
+                    <button onclick="deleteBook(${book.id})">Sterge</button>
+                `;
+                bookList.appendChild(card);
+            });
+        }
+
+        // Adauga o carte noua
+        document.getElementById('addBookForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const newBook = {
+                title: document.getElementById('title').value,
+                author: document.getElementById('author').value,
+                genre: document.getElementById('genre').value,
+                year: parseInt(document.getElementById('year').value)
+            };
+               try {
+        // Trimitem cererea POST către backend
+        const response = await fetch('/books', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(newBook),
+        });
+        fetchBooks();
+        if (response.ok) {
+            // Resetăm câmpurile formularului după adăugare
+            document.getElementById('addBookForm').reset();
+        } else {
+            alert('Eroare: Nu s-a putut adauga cartea.');
+        }
+    } catch (error) {
+        console.error('Eroare la comunicarea cu serverul:', error);
+        alert('Eroare la conectarea cu serverul.');
+    }
+
+        });
+
+        // Sterge o carte
+        async function deleteBook(id) {
+            await fetch('${apiUrl}/${id}', { method: 'DELETE' });
+            fetchBooks();
+        }
+
+        // Incarca lista de carti la pornirea aplicatiei
+        fetchBooks();
+    </script>
+</body>
+</html>
