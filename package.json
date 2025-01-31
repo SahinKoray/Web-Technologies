@@ -15,7 +15,7 @@
         "sequelize",
         "sqlite"
     ],
-    "author": "Sahin Koray-Andrei si Moroianu David",
+    "author": "Sahin Koray-Andrei",
     "license": "MIT",
     "dependencies": {
         "cors": "^2.8.5",
