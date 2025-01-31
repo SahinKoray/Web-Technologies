@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Librarie online</title>
     <style>
-        /* Stiluri generale */
         body {
             font-family: 'Arial', sans-serif;
             background-color: #f7f7ff;
@@ -42,7 +41,7 @@
             min-width: 300px;
         }
     
-        /* Stiluri formular */
+
         form {
             background-color: #f5f5fa;
             padding: 20px;
@@ -60,11 +59,11 @@
         form input {
              width: 100%;
              padding: 10px;
-             margin-bottom: 15px; /* Spatiere intre inputuri */
+             margin-bottom: 15px; 
              border: 2px solid #e0e0f8;
              border-radius: 5px;
              font-size: 16px;
-             box-sizing: border-box; /* Asigura ca padding-ul este inclus in dimensiunea input-ului */
+             box-sizing: border-box; 
              transition: all 0.3s ease;
         }
     
@@ -89,10 +88,10 @@
             background-color: #4a32b3;
         }
     
-        /* Stiluri lista de carti */
+
         #bookList {
-            max-height: 400px; /* Inaltime limitata pentru scroll */
-            overflow-y: auto; /* Scroll vertical */
+            max-height: 400px; 
+            overflow-y: auto;
             padding-right: 10px;
         }
     
@@ -101,7 +100,7 @@
             border-radius: 10px;
             padding: 15px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px; /* Spatiere intre carduri */
+            margin-bottom: 20px; 
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
     
@@ -135,7 +134,6 @@
             background-color: #c0392b;
         }
     
-        /* Stiluri responsive */
         @media (max-width: 768px) {
             .row {
                 flex-direction: column;
@@ -150,7 +148,6 @@
     <div class="container">
         <h1>Lista cartilor citite</h1>
         <div class="row">
-            <!-- Formular pentru adaugarea unei carti -->
             <div class="col">
                 <h3>Adauga o carte</h3>
                 <form id="addBookForm">
@@ -170,11 +167,9 @@
                 </form>
             </div>
 
-            <!-- Lista de carti -->
             <div class="col">
                 <h3>Lista de carti</h3>
                 <div id="bookList">
-                    <!-- Cartile vor fi generate dinamic aici -->
                 </div>
             </div>
         </div>
@@ -183,14 +178,12 @@
     <script>
         const apiUrl = '/books';
 
-        // Preia lista de carti din API
         async function fetchBooks() {
             const response = await fetch(apiUrl);
             const books = await response.json();
             displayBooks(books);
         }
 
-        // Afiseaza lista de carti
         function displayBooks(books) {
             const bookList = document.getElementById('bookList');
             bookList.innerHTML = ''; // Curata lista existenta
@@ -208,7 +201,6 @@
             });
         }
 
-        // Adauga o carte noua
         document.getElementById('addBookForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const newBook = {
@@ -218,7 +210,7 @@
                 year: parseInt(document.getElementById('year').value)
             };
                try {
-        // Trimitem cererea POST către backend
+        // Trimitem cererea POST catre backend
         const response = await fetch('/books', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -226,7 +218,7 @@
         });
         fetchBooks();
         if (response.ok) {
-            // Resetăm câmpurile formularului după adăugare
+            // Resetam campurile formularului dupa adaugare
             document.getElementById('addBookForm').reset();
         } else {
             alert('Eroare: Nu s-a putut adauga cartea.');
@@ -238,11 +230,10 @@
 
         });
 
-        // Sterge o carte
         async function deleteBook(id) {
-            await fetch('${apiUrl}/${id}', { method: 'DELETE' });
-            fetchBooks();
-        }
+    await fetch(`${apiUrl}/${id}`, { method: 'DELETE' });
+    fetchBooks();
+}
 
         // Incarca lista de carti la pornirea aplicatiei
         fetchBooks();

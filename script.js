@@ -1,8 +1,6 @@
 // Importam modulele necesare
 import express from 'express'; // Framework pentru servere web
 import { Sequelize } from 'sequelize'; // ORM pentru interactiunea cu baza de date
-import cors from 'cors';
-
 
 // Configuram conexiunea la baza de date SQLite
 const conn = new Sequelize({
@@ -12,10 +10,10 @@ const conn = new Sequelize({
 
 // Definim modelul "Book" care reprezinta o tabela in baza de date
 const Book = conn.define('book', {
-    title: Sequelize.STRING, // Coloana pentru titlul cartii
-    author: Sequelize.STRING, // Coloana pentru autorul cartii
-    genre: Sequelize.STRING, // Coloana pentru genul cartii
-    year: Sequelize.INTEGER // Coloana pentru anul publicarii
+    title: Sequelize.STRING, // Coloana pentru titlul cartii de tip string
+    author: Sequelize.STRING, // Coloana pentru autorul cartii de tip string
+    genre: Sequelize.STRING, // Coloana pentru genul cartii de tip string
+    year: Sequelize.INTEGER // Coloana pentru anul publicarii de tip integer
 });
 
 // Sincronizam baza de date si cream/actualizam tabelele pe baza modelelor
@@ -27,8 +25,6 @@ try {
 
 // Cream o aplicatie Express
 const app = express();
-
-app.use(cors());
 
 // Configuram serverul sa serveasca fisiere statice din directorul "public"
 app.use(express.static('public'));
